@@ -28,7 +28,7 @@ SourceCodeReview::SourceCodeReview(const QString &filePath, const QString &sourc
    auto linesCount = 0;
    QString summary;
 
-   for (auto i = 0, j = lines.count() - 1; i <= 4 && j >= 0; ++i, --j)
+   for (qsizetype i = 0, j = lines.count() - 1; i <= 4 && j >= 0; ++i, --j)
    {
       if (!lines[j].isEmpty() && lines[j].count() > 1)
       {

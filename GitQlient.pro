@@ -6,7 +6,11 @@ greaterThan(QT_MINOR_VERSION, 12) {
 }
 
 TARGET = gitqlient
-QT += widgets core network svg webenginewidgets webchannel
+QT += widgets core network svg
+# NOTE: Qt6 don't have those modules yet
+equals(QT_MAJOR_VERSION, 5) {
+    QT += webenginewidgets webchannel
+}
 DEFINES += QT_DEPRECATED_WARNINGS
 QMAKE_LFLAGS += -no-pie
 

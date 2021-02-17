@@ -38,6 +38,7 @@ void ClickableFrame::mouseReleaseEvent(QMouseEvent *e)
    QFrame::mouseReleaseEvent(e);
 }
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 void ClickableFrame::enterEvent(QEvent *event)
 {
    if (mHasLinkStyles)
@@ -49,6 +50,19 @@ void ClickableFrame::enterEvent(QEvent *event)
 
    QFrame::enterEvent(event);
 }
+#else
+void ClickableFrame::enterEvent(QEnterEvent *event)
+{
+   if (mHasLinkStyles)
+   {
+      QFont f = mText->font();
+      f.setUnderline(true);
+      mText->setFont(f);
+   }
+
+   QFrame::enterEvent(event);
+}
+#endif
 
 void ClickableFrame::leaveEvent(QEvent *event)
 {

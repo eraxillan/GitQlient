@@ -105,3 +105,4 @@ private:
     */
    void onGitServerError(const QString &error);
 };
+

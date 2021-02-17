@@ -76,3 +76,4 @@ QLabel *CodeReviewComment::createHeadline(const QDateTime &dt, const QString &pr
 
    return label;
 }
+

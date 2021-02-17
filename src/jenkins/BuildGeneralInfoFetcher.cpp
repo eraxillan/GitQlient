@@ -52,12 +52,12 @@ void BuildGeneralInfoFetcher::processData(const QJsonDocument &json)
 
    if (jsonObject.contains(QStringLiteral("artifacts")))
    {
-      const auto artifacts = jsonObject[QStringLiteral("artifacts")].toArray();
+      QJsonArray artifacts = jsonObject[QStringLiteral("artifacts")].toArray();
 
       for (const auto &artifact : artifacts)
       {
          JenkinsJobBuildInfo::Artifact sArtifact;
-         sArtifact.fileName = artifact[QStringLiteral("fileName")].toString();
+         sArtifact.fileName = (static_cast<QJsonValue>(artifact))[QStringLiteral("fileName")].toString();
          sArtifact.url = QString("%1artifact/%2").arg(jsonObject[QStringLiteral("url")].toString(), sArtifact.fileName);
 
          mBuild.artifacts.append(sArtifact);

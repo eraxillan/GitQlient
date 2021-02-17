@@ -244,3 +244,4 @@ void CreateIssueDlg::updateMarkdown(const QByteArray &fileContent)
 
    ui->preview->setUrl(QUrl(QString("qrc:/resources/index_%1.html").arg(style)));
 }
+

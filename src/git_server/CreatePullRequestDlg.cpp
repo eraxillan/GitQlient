@@ -196,3 +196,4 @@ void CreatePullRequestDlg::onGitServerError(const QString &error)
 
    QMessageBox::warning(this, tr("API access error!"), error);
 }
+

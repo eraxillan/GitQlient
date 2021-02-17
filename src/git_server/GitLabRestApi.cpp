@@ -406,9 +406,10 @@ Issue GitLabRestApi::issueFromJson(const QJsonObject &json) const
 
    const auto assignees = json["assignees"].toArray();
 
-   for (const auto &assignee : assignees)
+   for (const auto &assigneeRef : assignees)
    {
       GitServer::User sAssignee;
+      QJsonValue assignee = static_cast<QJsonValue>(assigneeRef);
       sAssignee.id = assignee["id"].toInt();
       sAssignee.url = assignee["web_url"].toString();
       sAssignee.name = assignee["username"].toString();

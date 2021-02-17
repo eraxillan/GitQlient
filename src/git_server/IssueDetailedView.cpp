@@ -17,6 +17,7 @@
 #include <QStackedLayout>
 #include <QMenu>
 #include <QEvent>
+#include <QActionGroup>
 
 using namespace GitServer;
 
@@ -28,7 +29,9 @@ IssueDetailedView::IssueDetailedView(const QSharedPointer<GitBase> &git,
    , mBtnGroup(new QButtonGroup())
    , mTitleLabel(new QLabel())
    , mStackedLayout(new QStackedLayout())
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
    , mPrCommentsList(new PrCommentsList(mGitServerCache))
+#endif
    , mPrChangesList(new PrChangesList(mGit))
    , mPrCommitsList(new PrCommitsList(mGitServerCache))
    , mReviewBtn(new QToolButton())
@@ -102,7 +105,9 @@ IssueDetailedView::IssueDetailedView(const QSharedPointer<GitBase> &git,
    mAddComment->setToolTip(tr("Add new comment"));
    mAddComment->setDisabled(true);
    mAddComment->setObjectName("ViewBtnOption");
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
    connect(mAddComment, &QPushButton::clicked, mPrCommentsList, &PrCommentsList::addGlobalComment);
+#endif
 
    mCloseIssue = new QPushButton(this);
    mCloseIssue->setCheckable(true);
@@ -141,10 +146,14 @@ IssueDetailedView::IssueDetailedView(const QSharedPointer<GitBase> &git,
 
    mPrCommitsList->setVisible(false);
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
    mStackedLayout->insertWidget(static_cast<int>(Buttons::Comments), mPrCommentsList);
+#endif
    mStackedLayout->insertWidget(static_cast<int>(Buttons::Changes), mPrChangesList);
    mStackedLayout->insertWidget(static_cast<int>(Buttons::Commits), mPrCommitsList);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
    mStackedLayout->setCurrentWidget(mPrCommentsList);
+#endif
 
    const auto issuesLayout = new QVBoxLayout(this);
    issuesLayout->setContentsMargins(QMargins());
@@ -159,11 +168,17 @@ IssueDetailedView::IssueDetailedView(const QSharedPointer<GitBase> &git,
    connect(mBtnGroup, SIGNAL(buttonClicked(int)), this, SLOT(onViewChange(int)));
 #endif
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
    connect(mPrCommentsList, &PrCommentsList::frameReviewLink, mPrChangesList, &PrChangesList::addLinks);
+#endif
    connect(mPrChangesList, &PrChangesList::gotoReview, this, [this](int frameId) {
       mBtnGroup->button(static_cast<int>(Buttons::Comments))->setChecked(true);
       mStackedLayout->setCurrentIndex(static_cast<int>(Buttons::Comments));
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
       mPrCommentsList->highlightComment(frameId);
+#else
+      Q_UNUSED(frameId);
+#endif
    });
    connect(mPrChangesList, &PrChangesList::addCodeReview, this, &IssueDetailedView::addCodeReview);
    connect(mPrCommitsList, &PrCommitsList::openDiff, this, &IssueDetailedView::openDiff);
@@ -190,7 +205,9 @@ void IssueDetailedView::loadData(IssueDetailedView::Config config, int issueNum,
    const auto title = mIssue.title.count() >= 40 ? mIssue.title.left(40).append("...") : mIssue.title;
    mTitleLabel->setText(QString("#%1 - %2").arg(mIssue.number).arg(title));
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
    mPrCommentsList->loadData(static_cast<PrCommentsList::Config>(mConfig), issueNum);
+#endif
 
    if (mConfig == Config::PullRequests)
    {

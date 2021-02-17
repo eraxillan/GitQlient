@@ -30,6 +30,7 @@ void ButtonLink::mouseReleaseEvent(QMouseEvent *event)
       emit clicked();
 }
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 void ButtonLink::enterEvent(QEvent *event)
 {
    Q_UNUSED(event);
@@ -43,6 +44,21 @@ void ButtonLink::enterEvent(QEvent *event)
       setFont(f);
    }
 }
+#else
+void ButtonLink::enterEvent(QEnterEvent *event)
+{
+   Q_UNUSED(event);
+
+   if (isEnabled())
+   {
+      QApplication::setOverrideCursor(Qt::PointingHandCursor);
+
+      QFont f = font();
+      f.setUnderline(true);
+      setFont(f);
+   }
+}
+#endif
 
 void ButtonLink::leaveEvent(QEvent *event)
 {

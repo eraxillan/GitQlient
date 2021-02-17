@@ -46,3 +46,4 @@ private:
 
    QLabel *createHeadline(const QDateTime &dt, const QString &prefix);
 };
+

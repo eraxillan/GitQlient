@@ -17,9 +17,13 @@
 #include <QKeyEvent>
 #include <QMenu>
 #include <QMessageBox>
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
 #include <QRegExp>
-#include <QScrollBar>
 #include <QTextCodec>
+#else
+#include <QRegularExpression>
+#endif
+#include <QScrollBar>
 #include <QToolTip>
 #include <QListWidgetItem>
 #include <QTextStream>
@@ -423,11 +427,19 @@ bool CommitChangesWidget::checkMsg(QString &msg)
    if (!ui->teDescription->toPlainText().isEmpty())
    {
       auto description = QString("\n\n%1").arg(ui->teDescription->toPlainText());
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
       description.remove(QRegExp("(^|\\n)\\s*#[^\\n]*")); // strip comments
+#else
+      description.remove(QRegularExpression("(^|\\n)\\s*#[^\\n]*")); // strip comments
+#endif
       msg += description;
    }
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
    msg.replace(QRegExp("[ \\t\\r\\f\\v]+\\n"), "\n"); // strip line trailing cruft
+#else
+   msg.replace(QRegularExpression("[ \\t\\r\\f\\v]+\\n"), "\n"); // strip line trailing cruft
+#endif
    msg = msg.trimmed();
 
    if (msg.isEmpty())

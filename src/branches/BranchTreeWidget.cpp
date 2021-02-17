@@ -11,6 +11,9 @@
 
 #include <QApplication>
 #include <QMessageBox>
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#include <QRegularExpression>
+#endif
 
 using namespace GitQlient;
 
@@ -138,9 +141,16 @@ void BranchTreeWidget::checkoutBranch(QTreeWidgetItem *item)
 
          if (ret.success)
          {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
             QRegExp rx("by \\d+ commits");
             rx.indexIn(output);
             auto value = rx.capturedTexts().constFirst().split(" ");
+#else
+            QRegularExpression rx("by \\d+ commits");
+            QRegularExpressionMatch matches = rx.match(output);
+            Q_ASSERT(matches.hasMatch());
+            QStringList value = matches.captured(1).split(" ");
+#endif
             auto uiUpdateRequested = false;
 
             if (value.count() == 3 && output.contains("your branch is behind", Qt::CaseInsensitive))

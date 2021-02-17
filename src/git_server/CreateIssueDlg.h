@@ -104,3 +104,4 @@ private:
 
    void updateMarkdown(const QByteArray &fileContent);
 };
+

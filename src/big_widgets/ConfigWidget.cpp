@@ -72,7 +72,7 @@ ConfigWidget::ConfigWidget(const QSharedPointer<GitBase> &git, QWidget *parent)
 
    const auto globalGit = new FileEditor(false, this);
    globalGit->editFile(
-       QString("%1/%2").arg(QStandardPaths::writableLocation(QStandardPaths::HomeLocation), ".gitconfig"));
+       QString("%1/%2").arg(QStandardPaths::writableLocation(QStandardPaths::HomeLocation), QString(".gitconfig")));
    globalGitLayout->addWidget(globalGit);
    mEditors.insert(1, globalGit);
 

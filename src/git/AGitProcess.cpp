@@ -94,7 +94,7 @@ QStringList splitArgList(const QString &cmd)
       if (it->isEmpty())
          continue;
 
-      if (((*it).at(0) == "\"" && (*it).right(1) == "\"") || ((*it).at(0) == "\'" && (*it).right(1) == "\'"))
+      if ((QString((*it).at(0)) == "\"" && (*it).right(1) == "\"") || (QString((*it).at(0)) == "\'" && (*it).right(1) == "\'"))
          *it = (*it).mid(1, (*it).length() - 2);
    }
    return sl;

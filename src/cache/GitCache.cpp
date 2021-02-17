@@ -9,7 +9,11 @@ using namespace GitServer;
 
 GitCache::GitCache(QObject *parent)
    : QObject(parent)
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
    , mMutex(QMutex::Recursive)
+#else
+   , mMutex()
+#endif
 {
 }
 

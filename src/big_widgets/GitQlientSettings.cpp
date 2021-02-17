@@ -41,7 +41,11 @@ QStringList GitQlientSettings::getRecentProjects() const
    auto projects = globalSettings.value("Config/RecentProjects", QStringList()).toStringList();
 
    QStringList recentProjects;
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
    const auto end = std::min(projects.count(), 5);
+#else
+   const auto end = std::min(projects.count(), 5LL);
+#endif
 
    for (auto i = 0; i < end; ++i)
       recentProjects.append(projects.takeFirst());
@@ -112,7 +116,11 @@ QStringList GitQlientSettings::getMostUsedProjects() const
       projectOrderedByUse.insert(timesUsed.at(i).toInt(), projects.at(i));
 
    QStringList recentProjects;
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
    const auto end = std::min(projectOrderedByUse.count(), 5);
+#else
+   const auto end = std::min(projectOrderedByUse.count(), 5LL);
+#endif
    const auto orderedProjects = projectOrderedByUse.values();
 
    for (auto i = 0; i < end; ++i)

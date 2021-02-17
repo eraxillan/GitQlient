@@ -41,7 +41,7 @@ void JobDetailsFetcher::readHealthReportsPartFor(QJsonObject &jsonObject)
          JenkinsJobInfo::HealthStatus status;
          QJsonObject healthObject = item.toObject();
          if (healthObject.contains(QStringLiteral("score")))
-            status.score = healthObject[QStringLiteral("score")].toInt();
+            status.score = healthObject[QStringLiteral("score")].toString();
          if (healthObject.contains(QStringLiteral("description")))
             status.description = healthObject[QStringLiteral("description")].toString();
          if (healthObject.contains(QStringLiteral("iconClassName")))
@@ -85,9 +85,11 @@ void JobDetailsFetcher::retrieveBuildConfig(const QJsonArray &propertyArray)
       {
          const auto params = propertyObj[QStringLiteral("parameterDefinitions")].toArray();
 
-         for (const auto &config : params)
+         for (const auto &configRef : params)
          {
             JenkinsJobBuildConfig jobConfig;
+            QJsonValue config = static_cast<QJsonValue>(configRef);
+
             jobConfig.name = config[QStringLiteral("name")].toString();
 
             if (config[QStringLiteral("type")].toString() == "BooleanParameterDefinition")

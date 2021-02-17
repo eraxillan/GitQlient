@@ -33,7 +33,11 @@ using namespace GitServer;
 
 PrCommentsList::PrCommentsList(const QSharedPointer<GitServerCache> &gitServerCache, QWidget *parent)
    : QFrame(parent)
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
    , mMutex(QMutex::Recursive)
+#else
+   , mMutex()
+#endif
    , mGitServerCache(gitServerCache)
    , mManager(new QNetworkAccessManager())
 {
@@ -566,8 +570,10 @@ QVector<QLayout *> PrCommentsList::createBubbleForCodeReview(int reviewId, QVect
          commentsLayout->setContentsMargins(QMargins());
          commentsLayout->setSpacing(20);
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
          for (auto &comment : codeReviews)
             commentsLayout->addWidget(new CodeReviewComment(comment));
+#endif
 
          codeReviewLayout->addLayout(commentsLayout);
 
@@ -675,3 +681,4 @@ QColor HighlightningFrame::color()
 {
    return Qt::black; // getter is not really needed for now
 }
+

@@ -80,7 +80,11 @@ public:
    void addGlobalComment();
 
 private:
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
    QMutex mMutex;
+#else
+   QRecursiveMutex mMutex;
+#endif
    QSharedPointer<GitServerCache> mGitServerCache = nullptr;
    QNetworkAccessManager *mManager = nullptr;
    QFrame *mCommentsFrame = nullptr;
@@ -106,3 +110,4 @@ private:
    QVector<QLayout *> createBubbleForCodeReview(int reviewId, QVector<GitServer::CodeReview> &comments);
    void addReplyToCodeReview(int commentId, const QString &message);
 };
+

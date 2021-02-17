@@ -78,7 +78,11 @@ protected:
     *
     * @param event The event
     */
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
    void enterEvent(QEvent *event) override;
+#else
+   void enterEvent(QEnterEvent *event) override;
+#endif
 
    /**
     * @brief Event that processes if the users leaves the button link

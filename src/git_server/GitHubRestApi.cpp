@@ -655,8 +655,9 @@ void GitHubRestApi::onPullRequestStatusReceived(PullRequest pr)
 
       const auto statuses = obj["statuses"].toArray();
 
-      for (const auto &status : statuses)
+      for (const auto &statusRef : statuses)
       {
+         QJsonValue status = static_cast<QJsonValue>(statusRef);
          auto statusStr = status["state"].toString();
 
          if (statusStr == "ok")
@@ -739,9 +740,10 @@ void GitHubRestApi::onCommentsReceived(int issueNumber)
       QVector<Comment> comments;
       const auto commentsArray = tmpDoc.array();
 
-      for (const auto &commentData : commentsArray)
+      for (const auto &commentDataRef : commentsArray)
       {
          Comment c;
+         QJsonValue commentData = static_cast<QJsonValue>(commentDataRef);
          c.id = commentData["id"].toInt();
          c.body = commentData["body"].toString();
          c.creation = commentData["created_at"].toVariant().toDateTime();
@@ -798,8 +800,9 @@ void GitHubRestApi::onReviewsReceived(int prNumber)
       QMap<int, Review> reviews;
       const auto commentsArray = tmpDoc.array();
 
-      for (const auto &commentData : commentsArray)
+      for (const auto &commentDataRef : commentsArray)
       {
+         QJsonValue commentData = static_cast<QJsonValue>(commentDataRef);
          auto id = commentData["id"].toInt();
 
          Review r;
@@ -844,8 +847,9 @@ void GitHubRestApi::onReviewCommentsReceived(int prNumber)
       QVector<CodeReview> comments;
       const auto commentsArray = tmpDoc.array();
 
-      for (const auto &commentData : commentsArray)
+      for (const auto &commentDataRef : commentsArray)
       {
+         QJsonValue commentData = static_cast<QJsonValue>(commentDataRef);
          CodeReview c;
          c.outdated = false;
          c.id = commentData["id"].toInt();
@@ -899,8 +903,9 @@ void GitHubRestApi::onCommitsReceived(int prNumber)
       QVector<Commit> commits;
       const auto commitsArray = tmpDoc.array();
 
-      for (const auto &commitData : commitsArray)
+      for (const auto &commitDataRef : commitsArray)
       {
+         QJsonValue commitData = static_cast<QJsonValue>(commitDataRef);
          Commit c;
          c.url = commitData["html_url"].toString();
          c.sha = commitData["sha"].toString();
@@ -994,8 +999,9 @@ Issue GitHubRestApi::issueFromJson(const QJsonObject &json) const
 
    const auto labels = json["labels"].toArray();
 
-   for (const auto &label : labels)
+   for (const auto &labelRef : labels)
    {
+      QJsonValue label = static_cast<QJsonValue>(labelRef);
       issue.labels.append({ label["id"].toInt(), label["node_id"].toString(), label["url"].toString(),
                             label["name"].toString(), label["description"].toString(), label["color"].toString(),
                             label["default"].toBool() });
@@ -1003,8 +1009,9 @@ Issue GitHubRestApi::issueFromJson(const QJsonObject &json) const
 
    const auto assignees = json["assignees"].toArray();
 
-   for (const auto &assignee : assignees)
+   for (const auto &assigneeRef : assignees)
    {
+      QJsonValue assignee = static_cast<QJsonValue>(assigneeRef);
       GitServer::User sAssignee;
       sAssignee.id = assignee["id"].toInt();
       sAssignee.url = assignee["html_url"].toString();
@@ -1052,8 +1059,9 @@ PullRequest GitHubRestApi::prFromJson(const QJsonObject &json) const
 
    const auto labels = json["labels"].toArray();
 
-   for (const auto &label : labels)
+   for (const auto &labelRef : labels)
    {
+      QJsonValue label = static_cast<QJsonValue>(labelRef);
       pr.labels.append({ label["id"].toInt(), label["node_id"].toString(), label["url"].toString(),
                          label["name"].toString(), label["description"].toString(), label["color"].toString(),
                          label["default"].toBool() });
@@ -1061,8 +1069,9 @@ PullRequest GitHubRestApi::prFromJson(const QJsonObject &json) const
 
    const auto assignees = json["assignees"].toArray();
 
-   for (const auto &assignee : assignees)
+   for (const auto &assigneeRef : assignees)
    {
+      QJsonValue assignee = static_cast<QJsonValue>(assigneeRef);
       GitServer::User sAssignee;
       sAssignee.id = assignee["id"].toInt();
       sAssignee.url = assignee["html_url"].toString();

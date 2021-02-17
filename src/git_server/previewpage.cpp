@@ -60,3 +60,4 @@ bool PreviewPage::acceptNavigationRequest(const QUrl &url, QWebEnginePage::Navig
    QDesktopServices::openUrl(url);
    return false;
 }
+

@@ -27,6 +27,10 @@
 #include <QProcess>
 #include <QDesktopServices>
 
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#include <QRegularExpression>
+#endif
+
 #include <QLogger.h>
 
 using namespace QLogger;
@@ -296,9 +300,16 @@ void CommitHistoryContextMenu::checkoutBranch()
 
    if (ret.success)
    {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
       QRegExp rx("by \\d+ commits");
       rx.indexIn(ret.output.toString());
       auto value = rx.capturedTexts().constFirst().split(" ");
+#else
+      QRegularExpression rx("by \\d+ commits");
+      QRegularExpressionMatch matches = rx.match(ret.output.toString());
+      Q_ASSERT(matches.hasMatch());
+      auto value = matches.captured(1).split(" ");
+#endif
 
       if (value.count() == 3 && output.contains("your branch is behind", Qt::CaseInsensitive))
       {

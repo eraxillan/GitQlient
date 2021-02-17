@@ -37,8 +37,9 @@ void JobFetcher::processData(const QJsonDocument &json)
 
    const auto views = jsonObject[QStringLiteral("views")].toArray();
 
-   for (const auto &view : views)
+   for (const auto &viewRef : views)
    {
+      QJsonValue view = static_cast<QJsonValue>(viewRef);
       const auto _class = view[QStringLiteral("_class")].toString();
       const auto generalView = _class.contains("AllView");
       const auto jsonObject = view.toObject();

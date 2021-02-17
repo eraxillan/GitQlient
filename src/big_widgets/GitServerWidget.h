@@ -80,8 +80,10 @@ private:
    QStackedLayout *mStackedLayout = nullptr;
    IssueDetailedView *mDetailedView = nullptr;
    QFrame *mGeneralView = nullptr;
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
    CreateIssueDlg *mCreateIssueView = nullptr;
    CreatePullRequestDlg *mCreatePrView = nullptr;
+#endif
    QPushButton *mOldIssue = nullptr;
    QPushButton *mOldPr = nullptr;
    QPushButton *mRefresh = nullptr;

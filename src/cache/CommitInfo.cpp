@@ -1,6 +1,9 @@
 #include "CommitInfo.h"
 
 #include <QStringList>
+#if QT_VERSION >= QT_VERSION_CHECK(6, 0, 0)
+#include <QRegularExpression>
+#endif
 
 const QString CommitInfo::ZERO_SHA = QString("0000000000000000000000000000000000000000");
 const QString CommitInfo::INIT_SHA = QString("4b825dc642cb6eb9a060e54bf8d69288fbee4904");
@@ -79,9 +82,13 @@ QStringList CommitInfo::parents() const
 
 bool CommitInfo::isValid() const
 {
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
    static QRegExp hexMatcher("^[0-9A-F]{40}$", Qt::CaseInsensitive);
-
    return !mSha.isEmpty() && hexMatcher.exactMatch(mSha);
+#else
+   static QRegularExpression hexMatcher("^[0-9A-F]{40}$", QRegularExpression::CaseInsensitiveOption);
+   return !mSha.isEmpty() && hexMatcher.match(mSha).hasMatch();
+#endif
 }
 
 int CommitInfo::getActiveLane() const

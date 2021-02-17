@@ -134,13 +134,17 @@ void GitServerWidget::createWidget()
    mGeneralView = new QFrame();
    mGeneralView->setLayout(generalViewLayout);
 
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
    mCreateIssueView = new CreateIssueDlg(mGitServerCache, mGit->getWorkingDir(), this);
    mCreatePrView = new CreatePullRequestDlg(mCache, mGitServerCache, this);
+#endif
 
    mStackedLayout = new QStackedLayout();
    mStackedLayout->addWidget(mGeneralView);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
    mStackedLayout->addWidget(mCreateIssueView);
    mStackedLayout->addWidget(mCreatePrView);
+#endif
 
    const auto centralLayout = new QVBoxLayout();
    centralLayout->setContentsMargins(10, 10, 10, 10);
@@ -155,7 +159,9 @@ void GitServerWidget::createWidget()
    connect(newIssue, &QPushButton::clicked, [this]() { mStackedLayout->setCurrentIndex(1); });
    connect(newPr, &QPushButton::clicked, [this]() {
       mStackedLayout->setCurrentIndex(2);
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
       mCreatePrView->configure(mGit->getWorkingDir(), mGit->getCurrentBranch());
+#endif
    });
 
    delete mOldIssue;

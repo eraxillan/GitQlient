@@ -198,8 +198,13 @@ private:
 
    /**
     * @brief Mutex to make the method thread-safe.
+    * @note https://codereview.qt-project.org/c/qt/qtbase/+/312741/10
     */
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
    QMutex mMutex { QMutex::Recursive };
+#else
+   QRecursiveMutex mMutex;
+#endif
 
    /**
     * @brief Default builder of the class. It starts the thread.

@@ -82,7 +82,9 @@ private:
    QButtonGroup *mBtnGroup = nullptr;
    QLabel *mTitleLabel = nullptr;
    QStackedLayout *mStackedLayout = nullptr;
+#if QT_VERSION < QT_VERSION_CHECK(6, 0, 0)
    PrCommentsList *mPrCommentsList = nullptr;
+#endif
    PrChangesList *mPrChangesList = nullptr;
    PrCommitsList *mPrCommitsList = nullptr;
    QToolButton *mReviewBtn = nullptr;
