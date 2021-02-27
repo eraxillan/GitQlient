@@ -68,6 +68,19 @@ void GitCache::setup(const WipRevisionInfo &wipInfo, const QList<CommitInfo> &co
          ++count;
       }
    }
+
+   // FIXME: workaround for pointer to member invalidation during
+   //        during mCommitsMap modification problem
+   mCommits[0] = &mCommitsMap[CommitInfo::ZERO_SHA];
+   count = 1;
+   for (const auto &commit : commits)
+   {
+      if (commit.isValid())
+      {
+         mCommits.replace(count, &mCommitsMap[commit.sha()]);
+         ++count;
+      }
+   }
 }
 
 CommitInfo GitCache::getCommitInfoByRow(int row)
@@ -170,7 +183,8 @@ void GitCache::insertCommitInfo(CommitInfo rev, int orderIdx)
 
       mCommitsMap[sha] = rev;
 
-      mCommits.replace(orderIdx, &mCommitsMap[sha]);
+      // FIXME: see line 72
+//      mCommits.replace(orderIdx, &mCommitsMap[sha]);
 
       if (mTmpChildsStorage.contains(sha))
       {
